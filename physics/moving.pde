@@ -1,46 +1,31 @@
-/*class Moving{
-  
-Stickman Stanley;
-int grnd;
-
-void setup() {
-  size(200, 200);
-  grnd = height-20;
-  frameRate(30);
-  smooth();
-  Stanley = new Stickman(30);
-}
-
-void draw() {
-  background (200);
-  translate (width/2, grnd);
-  line (-width, 0, width, 0);
-  fill(0);
-  
-  Stanley.stickman();
-}
-
+float rotation=0;
+float rotationSpeed =-0.1;
+    float minSpeed = 0.1;
+    boolean isSlowing = false;
+    
 class Stickman {
   int start = int(random(360));
   float t, tk, tf0, tf1, tw;
-  float unit = 20;
-  Knee[] knees = new Knee[2];
-  Foot[] feet = new Foot[2];
-  Elbow[] elbows = new Elbow[2];
-  Hand[] hands = new Hand[2];
+  float unit = 1;
+  Knee[] knees = new Knee[1];
+  Foot[] feet = new Foot[1];
+  Elbow[] elbows = new Elbow[1];
+  Hand[] hands = new Hand[1];
 
   Stickman(float UNIT) {
-    for (int i=0; i<2; i++) {
+    for (int i=0; i<1; i++) {
       knees[i] = new Knee(i);
       feet[i] = new Foot(i);
       elbows[i] = new Elbow(i);
       hands[i] = new Hand(i);
     }
     unit = UNIT;
+    
   }
 
   void stickman() {
     strokeWeight(2);
+    stroke(#e0ac69);
     t = (frameCount + start)%360;
     tk = sin (radians(t * 8));
     tf0 = sin (radians((t+12) * 8));
@@ -70,10 +55,16 @@ class Stickman {
       else dir = -1;
     }
     void move() {
-      float angle = dir * radians(30*tk);
+      if (rotation>PI/4){
+      rotationSpeed=-0.02;
+      }
+      if(rotation<0){
+        rotationSpeed=0.02;
+      }
+      rotation+=rotationSpeed*sqrt(dude.dx*dude.dx+dude.dy*dude.dy)/3;
       pushMatrix ();
-      rotate(angle);
-      line(0, 0, 0, unit*1.15);
+      rotate(rotation/2);
+      line(0, 0, unit*1.15, 0);
       translate (0, unit*1.15);
       feet[id].move();
       popMatrix ();
@@ -88,15 +79,20 @@ class Stickman {
       if (i==0) dir = 1;
       else dir = -1;
     }
-    void move() {
-      if (dir==-1) angle = radians(30*tf0 + 25);
-      else angle = radians(30*tf1 + 25);
-      pushMatrix();
-      rotate(angle);
-      line(0, 0, 0, unit*1.15);
+    void move(){
+      
+      rotation+=rotationSpeed*sqrt(dude.dx*dude.dx+dude.dy*dude.dy)/3;
+      pushMatrix ();
+      if (dude.x<700)
+      rotate(rotation/10);
+      if(rotation<PI/4 && rotation>PI/10 && rotationSpeed<0){
+        line(9, 0, unit*1.15-1, -unit*1.15-1);
+      }
+      else{line(unit*1.15, 0, unit*1.15, -unit*1.15);}
       popMatrix();
     }
   }
+  
 
   class Elbow {
     int id, dir;
@@ -107,13 +103,16 @@ class Stickman {
       else dir = -1;
     }
     void move() {
-      float angle = -dir * radians(30*tk);
+      float angle = -dir * radians(tk);
       pushMatrix ();
-      rotate(angle);
+      if (dude.dx==0){
+      angle=0;
+    }
+      rotate(angle/2);
       line(0, 0, 0, unit*1.1);
       translate (0, unit*1.1);
       hands[id].move();  
-      popMatrix ();
+      popMatrix();
     }
   }
 
@@ -126,11 +125,15 @@ class Stickman {
       else dir = -1;
     }
     void move() {
-      if (dir==-1) angle = -radians(30*tf0 + 25);
+      if (dir==-1) angle = -radians(30*tf0 + 100);
       else angle = -radians(30*tf1 + 25);
       pushMatrix();
-      rotate(angle);
+      if (dude.dx==0){
+      angle=0;
+    }
+      rotate(angle/2);
       line(0, 0, 0, unit*1.1);
       popMatrix();
     }
-*/
+  }
+}

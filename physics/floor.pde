@@ -1,4 +1,4 @@
-class floor {
+  class floor {
   float x0;
   float y0;
   float x1;
